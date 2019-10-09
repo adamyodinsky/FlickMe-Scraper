@@ -1,0 +1,24 @@
+{
+  "name": "Moviesor-Scraper",
+  "version": "1.0.0",
+  "description": "Scraper - Scrape information about movies",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Yodinsky",
+  "license": "ISC",
+  "dependencies": {
+    "bunyan": "^1.8.12",
+    "bunyan-rotating-file-stream": "^1.6.3",
+    "cheerio": "^1.0.0-rc.3",
+    "config": "^3.2.2",
+    "express": "^4.17.1",
+    "express-validator": "^6.2.0",
+    "mongoose": "^5.7.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "thread-sleep": "^2.2.0"
+  }
+}
