@@ -49,7 +49,7 @@ const scrapeYearTopMovies = async (uri, year) => {
     // scrape movie details from movie specific page
     logger.info(`Scraping From ${tomato_base}${link}`);
     movie = await scrapeMovie(`${tomato_base}${link}`, year);
-    movie.rank = tr_element.children('td.bold').text().trim().replace('.', '');
+    movie.rank = tr_element.children('td.bold').text().trim().replace('.', '').trim();
     movie.rating =  tr_element.find('span.tMeterScore').first().text().trim();
     movie.fullName = tr_element.children('td').children('a').text().trim();
     console.log(movie);
