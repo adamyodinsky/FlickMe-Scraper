@@ -11,7 +11,7 @@ const MovieSchema = new mongoose.Schema({
     required: true
   },
   rank: {
-    type: String,
+    type: Number,
     required: true
   },
   rating: {
@@ -34,7 +34,7 @@ const MovieSchema = new mongoose.Schema({
   release: {
     type: String
   }, year: {
-    type: String,
+    type: Number,
     required: true
   },
   boxOffice: {
