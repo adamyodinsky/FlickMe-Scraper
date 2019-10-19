@@ -1,9 +1,7 @@
 const logger  = require('../helpers/logger');
-const config  = require('../config/config');
-const scrape  = require('../scraper/scraper').superCrawler;
+const scrape  = require('../scraper/tomatoScraper').superCrawler;
 
 //TODO a function that choose a scraper by body.collection
-
 
 const scrapeTomatoByYear = async (req, res) => {
   logger.info({body: req.body, headers: req.headers});
