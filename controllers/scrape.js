@@ -3,6 +3,7 @@ const scrape  = require('../scraper/tomatoScraper').superCrawler;
 
 //TODO a function that choose a scraper by body.collection
 
+
 const scrapeTomatoByYear = async (req, res) => {
   logger.info({body: req.body, headers: req.headers});
 
