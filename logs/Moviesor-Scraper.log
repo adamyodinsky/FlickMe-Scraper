@@ -1,0 +1,2 @@
+{"name":"Moviesor-Scraper","hostname":"Adams-Mac","pid":35706,"level":30,"msg":"Server running on localhost:3001","time":"2019-10-21T08:20:06.268Z","src":{"file":"/Users/ADAM/Desktop/my_projects/Mochooe/Scraper/app.js","line":19},"v":0}
+{"name":"Moviesor-Scraper","hostname":"Adams-Mac","pid":35706,"level":30,"msg":"MongoDB Connected...","time":"2019-10-21T08:20:06.965Z","src":{"file":"/Users/ADAM/Desktop/my_projects/Mochooe/Scraper/config/db.js","line":17,"func":"connectDB"},"v":0}

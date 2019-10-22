@@ -1,11 +1,10 @@
 const logger  = require('../helpers/logger');
 const scrape  = require('../scraper/tomatoScraper').superCrawler;
-
+const { youtubeScraper } = require('../scraper/youtubeScraper');
 //TODO a function that choose a scraper by body.collection
 
 
 const scrapeTomatoByYear = async (req, res) => {
-  logger.info({body: req.body, headers: req.headers});
 
   const { range, collection }  = req.body;
 
@@ -24,4 +23,15 @@ const scrapeTomatoByYear = async (req, res) => {
   }
 };
 
-module.exports = { scrapeTomatoByYear };
+
+const scrapeYoutube = async (req, res) => {
+
+    try {
+        res.status(202).json('scraping request has been accepted');
+        await youtubeScraper();
+    } catch (e) {
+        logger.error(e.message);
+    }
+};
+
+module.exports = { scrapeTomatoByYear, scrapeYoutube };

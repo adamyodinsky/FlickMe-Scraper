@@ -49,8 +49,11 @@ const MovieSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  trailer: {
+    type: String
   }
-});
+}, {strict: false});
 
 const Movie = mongoose.model(config.tomatoModelName, MovieSchema);
 

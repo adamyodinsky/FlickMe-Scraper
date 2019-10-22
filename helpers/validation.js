@@ -3,7 +3,7 @@ const logger = require('../helpers/logger');
 
 const validationRules = (method) => {
   switch (method) {
-    case 'scrape': {
+    case 'scrapeTomato': {
       return [
         body('range.start', 'range.start required').not().isEmpty(),
         body('range.end', 'range.end required').not().isEmpty(),
