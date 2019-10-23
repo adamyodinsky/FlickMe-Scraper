@@ -43,6 +43,18 @@ const scrapeGenreTopMovies = () => {
     GenresList.push(genre.href);
   }
 
+  // loop over each link of 100 top genre list
+  for (let genre of GenreLinksList) {
+    // loop over each movie in a 100's list 
+      // parse movie and return movie as json data file
+      // parse movie full name
+      // parse rating
+      // parse rank
+      // save to DB
+      // count++
+
+  }
+
   let storedCount = 0;
   let scrapedCount = 0;
 
@@ -111,7 +123,7 @@ const scrapeMovie = async(uri, year) => {
     release: "",
     boxOffice: "",
     runtime: "",
-    year: year,
+    year: "",
     uri: uri
   };
 
@@ -122,43 +134,42 @@ const scrapeMovie = async(uri, year) => {
     }
   };
 
-
   // Grab html page
   let $ = await request(options);
-  let details = $('div#movieSynopsis');
+  let synopsis = $('div#movieSynopsis');
 
   // grab name and synopsis
   movie.name  = $('h1').html().trim();
-  movie.synopsis = details.text().trim();
+  movie.synopsis = synopsis.text().trim();
 
-  details = details.next('ul').children('li').first(); // first of info element block
+  synopsis = synopsis.next('ul').children('li').first(); // first of info element block
 
   // skip until the matching
   let j=0;
   try {
-    while ((details.children('div.meta-label').html().trim() !== 'Rating:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').html().trim() !== 'Rating:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message + `parsing page of movie: ${movie.name} - ${uri}`);
   }
 
   // grab rate
   if(j<10) {
-    let rating = details.children('div.meta-value').first();
+    let rating = synopsis.children('div.meta-value').first();
     movie.rate = rating.text().trim();
   }
 
   // skip until the matching
   j=0;
-  details = details.next();
+  synopsis = synopsis.next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'Genre:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').text().trim() !== 'Genre:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message);
   }
 
   // grab genre
   if(j<10) {
-    let genres = details.children('div.meta-value').children('a');
+    let genres = synopsis.children('div.meta-value').children('a');
     for (let i = 0; i < genres.length; i++) {
       movie.genres.push(genres[i].children[0].data);
     }
@@ -166,16 +177,16 @@ const scrapeMovie = async(uri, year) => {
 
   // skip until matching
   j=0;
-  details = details.next();
+  synopsis = synopsis.next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'Directed By:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').text().trim() !== 'Directed By:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message);
   }
 
   //grab directors
   if(j<10) {
-    let directors = details.children('div.meta-value').children('a');
+    let directors = synopsis.children('div.meta-value').children('a');
     for (let i = 0; i < directors.length; i++) {
       movie.directors.push((directors[i].children[0].data));
     }
@@ -183,16 +194,16 @@ const scrapeMovie = async(uri, year) => {
 
   // skip until the matching
   j=0;
-  details = details.next();
+  synopsis = synopsis.next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'Written By:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').text().trim() !== 'Written By:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message);
   }
 
   //grab writers
   if(j<10) {
-    let writers = details.children('div.meta-value').children('a');
+    let writers = synopsis.children('div.meta-value').children('a');
     for (let i = 0; i < writers.length; i++) {
       movie.writers.push((writers[i].children[0].data));
     }
@@ -200,38 +211,38 @@ const scrapeMovie = async(uri, year) => {
 
   // skip until the matching
   j=0;
-  details = details.next();
+  synopsis = synopsis.next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'In Theaters:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').text().trim() !== 'In Theaters:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message);
   }
 
   // grab release date
   if(j<10) {
-    let release = details.children('div.meta-value').children('time');
+    let release = synopsis.children('div.meta-value').children('time');
     movie.release = release.text().trim();
   }
 
   // skip until the matching
   j=0;
-  details = details.next().next();
+  synopsis = synopsis.next().next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'Box Office:') && j < 10) { j++; }
+    while ((synopsis.children('div.meta-label').text().trim() !== 'Box Office:') && j < 10) { j++; }
   } catch (e) {
     logger.error(e.message);
   }
 
   // grab box office
   if(j<10) {
-    let boxOffice = details.children('div.meta-value');
+    let boxOffice = synopsis.children('div.meta-value');
     movie.boxOffice = boxOffice.text().trim();
   }
   // skip until the matching
   j=0;
-  details = details.next();
+  synopsis = synopsis.next();
   try {
-    while ((details.children('div.meta-label').text().trim() !== 'Runtime:') && j < 10) {
+    while ((synopsis.children('div.meta-label').text().trim() !== 'Runtime:') && j < 10) {
       j++;
     }
   } catch (e) {
@@ -240,7 +251,7 @@ const scrapeMovie = async(uri, year) => {
 
   // grab run time
   if(j<10) {
-    let runtime = details.children('div.meta-value').children('time');
+    let runtime = synopsis.children('div.meta-value').children('time');
     movie.runtime = runtime.text().trim();
   }
 

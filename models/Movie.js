@@ -14,6 +14,11 @@ const MovieSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  year_rank: {
+    type: Number,
+    required: true,
+    default: -1
+  },
   rating: {
     type: String,
     required: true
