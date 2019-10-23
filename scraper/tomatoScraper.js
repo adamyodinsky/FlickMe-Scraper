@@ -19,6 +19,37 @@ const superCrawler = async (range) => {
   }
 };
 
+
+const scrapeGenreTopMovies = () => {
+  logger.info("Scraping Movies From Top Genres List");
+
+  
+  const options = {
+    uri: uri,
+    transform: (body) => {
+      return cheerio.load(body);
+    }
+  };
+
+  // Grab html page
+  const $ = await request(options);
+
+  // grab genre top list links 
+  const GenresList = $('ul.genrelist').children('li').children('a');
+  let GenreLinksList = [];
+
+  for (let genre of GenresList) {
+    console.log('pushing to link list ' + genre.href);
+    GenresList.push(genre.href);
+  }
+
+  let storedCount = 0;
+  let scrapedCount = 0;
+
+}
+
+
+
 const scrapeYearTopMovies = async (uri, year) => {
   logger.info("Scraping Movies From "+ year);
 
