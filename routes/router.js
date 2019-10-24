@@ -1,5 +1,5 @@
 const express = require('express');
-const {scrapeTomatoByYear , scrapeYoutube } = require("../controllers/scrape");
+const {scrapeTomatoByYear , scrapeYoutube, scrapeTopGenres } = require("../controllers/scrape");
 const { validate, validationRules } = require('../helpers/validation');
 const { health }  = require('../controllers/health');
 const { updateManyCont } = require('../controllers/DB/updateMany');
@@ -12,7 +12,7 @@ const routes = () => {
 
     router.get('/scrapeTrailers', scrapeYoutube);
     router.post('/scrape', validationRules('scrapeTomato'), validate, scrapeTomatoByYear);
-
+    router.post('/scrapeGenres', scrapeTopGenres);
 return router;
 };
 

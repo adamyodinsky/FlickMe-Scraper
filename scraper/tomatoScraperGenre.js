@@ -6,13 +6,12 @@ const config = require('../config/config');
 const saveMovie = require('../helpers/saveMovie');
 
 const tomato_base = config.tomatoUri;
-const top_uri  = "top/bestofrt";
 const interval = 5000;
 
 
 const scrapeGenreTopMovies = async () => {
   logger.info("Scraping Movies From Top Genres List");
-
+  const uri = 'https://rottentomatoes.com/top/';
 
   const options = {
     uri: uri,
@@ -25,29 +24,23 @@ const scrapeGenreTopMovies = async () => {
   const $ = await request(options);
 
   // grab genre top list links
-  const GenresList = $('ul.genrelist').children('li').children('a');
+  const GenresList = await $('ul.genrelist').children('li').children('a');
   let GenreLinksList = [];
 
-  for (let genre of GenresList) {
-    console.log('pushing to link list ' + genre.href);
-    GenreLinksList.push(genre.href);
+  for (let i=0; i < GenresList.length; i++) {
+    GenreLinksList.push(GenresList[i].attribs.href);
   }
 
   // loop over each link of 100 top genre list
   for (let genreLink of GenreLinksList) {
     // loop over each movie in a 100's list
-    await scrape100TopMovies(genreLink);
+    await scrape100TopMovies(`${tomato_base}/${genreLink}`);
   }
-
-  let storedCount = 0;
-  let scrapedCount = 0;
-
 };
 
 
-
 const scrape100TopMovies = async (uri) => {
-  logger.info("Scraping Movies From: "+ uri);
+  logger.info(`Scraping Movies From: + ${uri}`);
 
   const options = {
     uri: uri,
@@ -99,7 +92,7 @@ const scrapeMovie = async(uri) => {
     genre_rank: "",
     rating: "",
     synopsis: "",
-    rate: "",
+    rated: "",
     genres: [],
     directors: [],
     writers: [],
@@ -138,7 +131,7 @@ const scrapeMovie = async(uri) => {
   // grab rate
   if(j<10) {
     let rating = synopsis.children('div.meta-value').first();
-    movie.rate = rating.text().trim();
+    movie.rated = rating.text().trim();
   }
 
   // skip until the matching
@@ -241,6 +234,4 @@ const scrapeMovie = async(uri) => {
   return movie;
 };
 
-// superCrawler({start: 2000, end: 2000}); // for test the scraper
-
-module.exports = { superCrawler };
+module.exports = { scrapeGenreTopMovies };

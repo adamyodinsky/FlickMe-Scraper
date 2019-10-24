@@ -12,13 +12,9 @@ const MovieSchema = new mongoose.Schema({
   },
   genre_rank: {
     type: Number,
-    required: true,
-    default: -1
   },
   year_rank: {
     type: Number,
-    required: true,
-    default: -1
   },
   rating: {
     type: String,
@@ -57,6 +53,12 @@ const MovieSchema = new mongoose.Schema({
     default: Date.now
   },
   trailer: {
+    type: String
+  },
+  year: {
+    type: String
+  },
+  rated: {
     type: String
   }
 }, {strict: false});
