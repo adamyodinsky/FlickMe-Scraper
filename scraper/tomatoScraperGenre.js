@@ -9,18 +9,45 @@ const tomato_base = config.tomatoUri;
 const top_uri  = "top/bestofrt";
 const interval = 5000;
 
-const superCrawler = async (range) => {
-  let length = range.end - range.start;
-  let year = range.start;
 
-  for(let i=0; i<=length; i++){
-    await scrape100TopMovies(`${tomato_base}/${top_uri}/?year=${year}`, year);
-    year++;
+const scrapeGenreTopMovies = async () => {
+  logger.info("Scraping Movies From Top Genres List");
+
+
+  const options = {
+    uri: uri,
+    transform: (body) => {
+      return cheerio.load(body);
+    }
+  };
+
+  // Grab html page
+  const $ = await request(options);
+
+  // grab genre top list links
+  const GenresList = $('ul.genrelist').children('li').children('a');
+  let GenreLinksList = [];
+
+  for (let genre of GenresList) {
+    console.log('pushing to link list ' + genre.href);
+    GenreLinksList.push(genre.href);
   }
+
+  // loop over each link of 100 top genre list
+  for (let genreLink of GenreLinksList) {
+    // loop over each movie in a 100's list
+    await scrape100TopMovies(genreLink);
+  }
+
+  let storedCount = 0;
+  let scrapedCount = 0;
+
 };
 
-const scrape100TopMovies = async (uri, year) => {
-  logger.info("Scraping Movies From "+ year);
+
+
+const scrape100TopMovies = async (uri) => {
+  logger.info("Scraping Movies From: "+ uri);
 
   const options = {
     uri: uri,
@@ -33,14 +60,13 @@ const scrape100TopMovies = async (uri, year) => {
   let $ = await request(options);
 
   // grab objects of movies
-  // let moviesObjects_a = $('table.table').children('tbody').children('tr').find('a');
   let tr_objects = $('table.table').children('tbody').children('tr');
   let tr_element = tr_objects.first();
 
   let storedCount = 0;
   let scrapedCount = 0;
   // scrape inside a movie page
-  logger.info(`Preparing to scrape ${tr_objects.length} movies, From ${year}`);
+  logger.info(`Preparing to scrape ${tr_objects.length} movies, From: ${uri}`);
   sleep(1000);
   for (let i=0; i<tr_objects.length; i++) {
   let movie;
@@ -48,8 +74,8 @@ const scrape100TopMovies = async (uri, year) => {
 
     // scrape movie details from movie specific page
     logger.info(`Scraping From ${tomato_base}${link}`);
-    movie = await scrapeMovie(`${tomato_base}${link}`, year);
-    movie.rank = tr_element.children('td.bold').text().trim().replace('.', '');
+    movie = await scrapeMovie(`${tomato_base}${link}`);
+    movie.genre_rank = tr_element.children('td.bold').text().trim().replace('.', '');
     movie.rating =  tr_element.find('span.tMeterScore').first().text().trim();
     movie.fullName = tr_element.children('td').children('a').text().trim();
     console.log(movie);
@@ -62,15 +88,15 @@ const scrape100TopMovies = async (uri, year) => {
     tr_element = tr_element.next(); // move to the next tr element
   }
 
-  logger.info({Scraped: scrapedCount, Stored: storedCount,  Year: year });
+  logger.info({Scraped: scrapedCount, Stored: storedCount});
 };
 
 
-const scrapeMovie = async(uri, year) => {
+const scrapeMovie = async(uri) => {
   let movie = {
     fullName: "",
     name: "",
-    rank: "",
+    genre_rank: "",
     rating: "",
     synopsis: "",
     rate: "",

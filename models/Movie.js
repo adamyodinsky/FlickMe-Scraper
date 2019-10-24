@@ -10,9 +10,10 @@ const MovieSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  rank: {
+  genre_rank: {
     type: Number,
-    required: true
+    required: true,
+    default: -1
   },
   year_rank: {
     type: Number,

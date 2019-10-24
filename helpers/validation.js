@@ -7,7 +7,14 @@ const validationRules = (method) => {
       return [
         body('range.start', 'range.start required').not().isEmpty(),
         body('range.end', 'range.end required').not().isEmpty(),
-        body('collection', 'collection required').not().isEmpty(),
+        body('collection', 'collection required').not().isEmpty()
+      ]
+    }
+    case 'updateManyCont': {
+      return [
+        body('filter', 'filter required').not().isEmpty(),
+        body('update', 'update required').not().isEmpty(),
+        body('options', 'options required').not().isEmpty()
       ]
     }
   }
