@@ -1,7 +1,6 @@
 const logger = require('../helpers/logger');
 const config = require('../config/config');
 const mongoose = require('mongoose');
-// require('./app.js');
 
 const health = async (req, res) => {
   const mongoState = mongoose.connection.readyState;

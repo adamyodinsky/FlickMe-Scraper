@@ -20,7 +20,7 @@ const superCrawler = async (range) => {
 };
 
 
-const scrapeGenreTopMovies = () => {
+const scrapeGenreTopMovies = async () => {
   logger.info("Scraping Movies From Top Genres List");
 
   
